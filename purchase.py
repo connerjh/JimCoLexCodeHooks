@@ -1,4 +1,4 @@
-import jimco
+import jimcodb
 import utilities
 import logging
 import json
@@ -29,7 +29,7 @@ def handle_purchase(intent_request):
 
             logger.info('Validating Account Number')
 
-            account = jimco.get_account(account_number)
+            account = jimcodb.get_account(account_number)
 
             if account is not None:
                 session_attributes['Account'] = json.dumps(account)
@@ -86,14 +86,15 @@ def handle_purchase(intent_request):
 
     elif invocation_source == 'FulfillmentCodeHook':
 
+        amount = float(slots['Amount'])
+
         if account is not None and 'IdentityConfirmed' in session_attributes:
 
-            amount = float(slots['Amount'])
             account['AccountValue'] = account['AccountValue'] + amount
 
             logger.info('Fullfilling Purchase with amount {}'.format(amount))
 
-            account = jimco.set_account(account)
+            account = jimcodb.set_account_value(account)
 
             session_attributes.pop('Account')
 
@@ -102,8 +103,11 @@ def handle_purchase(intent_request):
             return utilities.close(
                 session_attributes,
                 'Fulfilled',
-                'We have successfully invested ${} into the account {}. Your new balance is ${}'.format(amount, account['AccountNumber'],
-                                                                                                        account['AccountValue'])
+                'We have successfully invested ${} into the account {}. Your new balance is ${}'.format(
+                    amount,
+                    account['AccountNumber'],
+                    account['AccountValue']
+                )
             )
 
         else:
@@ -111,7 +115,11 @@ def handle_purchase(intent_request):
             return utilities.close(
                 session_attributes,
                 'Failed',
-                'We have failed to invest ${} into the account {}. Your new balance is ${}'.format(amount, account['AccountNumber'], account['AccountValue'])
+                'We have failed to invest ${} into the account {}. Your new balance is ${}'.format(
+                    amount,
+                    account['AccountNumber'],
+                    account['AccountValue']
+                )
             )
 
     return utilities.delegate(session_attributes, slots)

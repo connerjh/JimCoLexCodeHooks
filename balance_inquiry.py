@@ -1,4 +1,4 @@
-import jimco
+import jimcodb
 import utilities
 import logging
 import json
@@ -31,7 +31,7 @@ def handle_balance_inquiry(intent_request):
 
             logger.info('Validating Account Number')
 
-            account = jimco.get_account(account_number)
+            account = jimcodb.get_account(account_number)
 
             if account is not None:
                 session_attributes['Account'] = json.dumps(account)

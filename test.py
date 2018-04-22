@@ -1,10 +1,10 @@
 import lambda_function
 
-event = {
+event1 = {
   "currentIntent": {
     "slots": {
       "AccountNumber": 12345,
-      "LastFourSSN": "None"
+      "LastFourSSN": 1111
     },
     "name": "BalanceInquiry",
     "confirmationStatus": "None"
@@ -21,6 +21,31 @@ event = {
   "sessionAttributes": {}
 }
 
+event2 = {
+  "currentIntent": {
+    "slots": {
+      "AccountNumber": 12345,
+      "LastFourSSN": 2345,
+      "Amount": 100.0
+    },
+    "name": "Purchase",
+    "confirmationStatus": "None"
+  },
+  "bot": {
+    "alias": "$LATEST",
+    "version": "$LATEST",
+    "name": "JimCoCientServicing"
+  },
+  "userId": "John",
+  "invocationSource": "FulfillmentCodeHook",
+  "outputDialogMode": "Text",
+  "messageVersion": "1.0",
+  "sessionAttributes": {
+    "Account": "{\"IndividualId\": 1, \"FirstName\": \"Bob\", \"LastName\": \"Smith\", \"UserName\": \"bob\", \"LastFourSSN\": 1111, \"AccountNumber\": 12345, \"AccountValue\": 10.0, \"AccountId\": 1, \"SocialCode\": 1}",
+    "IdentityConfirmed": True
+  }
+}
+
 context = None
 
-print(lambda_function.lambda_handler(event, context))
+print(lambda_function.lambda_handler(event2, context))
