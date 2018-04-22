@@ -48,4 +48,4 @@ event2 = {
 
 context = None
 
-print(lambda_function.lambda_handler(event2, context))
+print(lambda_function.lambda_handler(event1, context))

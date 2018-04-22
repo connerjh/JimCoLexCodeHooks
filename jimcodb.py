@@ -6,24 +6,29 @@ import json
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-rds_host = rds_config.db_endpoint
-name = rds_config.db_username
-password = rds_config.db_password
-db_name = rds_config.db_name
-port = rds_config.db_port
+# ------------------------------------------------------------------------------
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger()
 
-try:
+def get_connection():
 
-    connection = pymysql.connect(rds_host, user=name, passwd=password, db=db_name, connect_timeout=5)
+    rds_host = rds_config.db_endpoint
+    name = rds_config.db_username
+    password = rds_config.db_password
+    db_name = rds_config.db_name
+    port = rds_config.db_port
 
-except Exception as e:
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger()
 
-    logger.error("ERROR: Unexpected error: Could not connect to MySql instance. {}".format(e))
+    try:
 
-logger.info("SUCCESS: Connection to RDS mysql instance succeeded")
+        return pymysql.connect(rds_host, port=port, user=name, passwd=password, db=db_name, connect_timeout=5)
+
+    except Exception as e:
+
+        logger.error("ERROR: Unexpected error: Could not connect to MySql instance. {}".format(e))
+
+    logger.info("SUCCESS: Connection to RDS mysql instance succeeded")
 
 # ------------------------------------------------------------------------------
 
@@ -31,6 +36,8 @@ logger.info("SUCCESS: Connection to RDS mysql instance succeeded")
 def set_account_value(account):
 
     try:
+
+        connection = get_connection()
 
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute(
@@ -59,6 +66,8 @@ def set_account_value(account):
 def get_account(account_number):
 
     try:
+
+        connection = get_connection()
 
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute("SELECT * FROM jimcodb.IndividualAccountView where AccountNumber = %s;", (account_number,))
