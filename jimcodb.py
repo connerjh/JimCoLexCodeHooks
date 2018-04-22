@@ -79,3 +79,33 @@ def get_account(account_number):
 
         logger.error('JimCoAccountQuery Error: ' + str(e))
         return None
+
+# -----------------------------------------------------------------------------
+
+
+def get_account_messages(account_number):
+
+    try:
+
+        connection = get_connection()
+
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            cursor.execute(
+                "SELECT AccountNumber, SocialCode, AccountMessage, MessageType, Priority " +
+                "FROM jimcodb.AccountMessagesView " +
+                "where AccountNumber = %s and EffectiveFrom <= Now() and EffectiveTo >= Now() " +
+                "order by Priority asc;",
+                (
+                    account_number,
+                )
+            )
+            messages = cursor.fetchall()
+            logger.info('returned messages: {}'.format(json.dumps(messages)))
+            return messages
+
+    except Exception as e:
+
+        logger.error('JimCoAccountQuery Error: ' + str(e))
+        return None
+
+

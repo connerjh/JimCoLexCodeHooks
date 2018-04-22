@@ -1,3 +1,18 @@
+def confirm_intent(session_attributes, intent_name, slots, message):
+    return {
+        'sessionAttributes': session_attributes,
+        "dialogAction": {
+            "type": "ConfirmIntent",
+            "slots": slots,
+            "message": {
+                "contentType": "PlainText",
+                "content": message
+            },
+            "intentName": intent_name,
+        }
+    }
+
+
 def elicit_slot(session_attributes, intent_name, slots, slot_to_elicit, message):
     return {
         'sessionAttributes': session_attributes,

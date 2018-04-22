@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-zip -r JimCoLexCodeHooks.zip pymysql balance_inquiry.py jimcodb.py lambda_function.py \
+rm JimCoLexCodeHooks.zip
+
+zip -r JimCoLexCodeHooks.zip pymysql agent_assistance.py balance_inquiry.py jimcodb.py lambda_function.py \
     purchase.py utilities.py rds_config.py
 
 aws lambda update-function-code \

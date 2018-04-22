@@ -1,4 +1,5 @@
 import lambda_function
+import jimcodb
 
 event1 = {
   "currentIntent": {
@@ -46,6 +47,56 @@ event2 = {
   }
 }
 
+event3 = {
+  "currentIntent": {
+    "slots": {
+      "AccountNumber": 12345,
+      "LastFourSSN": 1111
+    },
+    "name": "BalanceInquiry",
+    "confirmationStatus": "None"
+  },
+  "bot": {
+    "alias": "$LATEST",
+    "version": "$LATEST",
+    "name": "JimCoCientServicing"
+  },
+  "userId": "John",
+  "invocationSource": "FulfillmentCodeHook",
+  "outputDialogMode": "Text",
+  "messageVersion": "1.0",
+  "sessionAttributes": {
+    "Account": "{\"IndividualId\": 1, \"FirstName\": \"Bob\", \"LastName\": \"Smith\", \"UserName\": \"bob\", \"LastFourSSN\": 1111, \"AccountNumber\": 12345, \"AccountValue\": 10.0, \"AccountId\": 1, \"SocialCode\": 1}",
+    "IdentityConfirmed": True
+  }
+}
+
+event4 = {
+  "currentIntent": {
+    "slots": {
+      "PhoneNumber": "+12108548842",
+    },
+    "name": "AgentAssistance",
+    "confirmationStatus": "None"
+  },
+  "bot": {
+    "alias": "$LATEST",
+    "version": "$LATEST",
+    "name": "JimCoCientServicing"
+  },
+  "userId": "John",
+  "invocationSource": "FulfillmentCodeHook",
+  "outputDialogMode": "Text",
+  "messageVersion": "1.0",
+  "sessionAttributes": {
+    "Account": "{\"IndividualId\": 1, \"FirstName\": \"Bob\", \"LastName\": \"Smith\", \"UserName\": \"bob\", \"LastFourSSN\": 1111, \"AccountNumber\": 12345, \"AccountValue\": 10.0, \"AccountId\": 1, \"SocialCode\": 1}",
+    "IdentityConfirmed": True
+  }
+}
+
 context = None
 
-print(lambda_function.lambda_handler(event1, context))
+# print(jimcodb.get_account_messages(12345))
+
+print(lambda_function.lambda_handler(event4, context))
+

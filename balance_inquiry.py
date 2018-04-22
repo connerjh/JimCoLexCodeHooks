@@ -70,13 +70,30 @@ def handle_balance_inquiry(intent_request):
         if account is not None and 'IdentityConfirmed' in session_attributes:
             # def close(session_attributes, fulfillment_state, message):
 
-            session_attributes.pop('Account')
+            messages = jimcodb.get_account_messages(account['AccountNumber'])
 
-            return utilities.close(
-                session_attributes,
-                'Fulfilled',
-                'The account value for account {} is ${}'.format(account['AccountNumber'], account['AccountValue'])
-            )
+            balance_message = 'The account value for account {} is ${}.'.format(account['AccountNumber'], account['AccountValue'])
+
+            if messages and len(messages) > 0:
+
+                response = utilities.confirm_intent(
+                    session_attributes,
+                    "AgentAssistance",
+                    {"PhoneNumber": None},
+                    balance_message + messages[0]['AccountMessage'] + " May I transfer you to an associate?"
+                )
+
+            else:
+
+                session_attributes.pop('Account')
+
+                response = utilities.close(
+                    session_attributes,
+                    'Fulfilled',
+                    'The account value for account {} is ${}'.format(account['AccountNumber'], account['AccountValue'])
+                )
+
+            return response
 
     return utilities.delegate(session_attributes, slots)
 
