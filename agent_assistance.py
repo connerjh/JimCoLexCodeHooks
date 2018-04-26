@@ -11,6 +11,7 @@ logger = logging.getLogger()
 
 # -----------------------------------------------------------------------------
 
+
 def handle_agent_assistance(intent_request):
     logger.info('Handling agent assistance')
 
@@ -25,61 +26,51 @@ def handle_agent_assistance(intent_request):
 
     if invocation_source == 'DialogCodeHook':
 
-        return utilities.delegate(session_attributes, slots)
+        if 'BotOrigin' in session_attributes and 'JimCoConnect' == session_attributes['BotOrigin']:
+
+            logger.info('setting phone number to blank.')
+            slots['PhoneNumber'] = "+10000000000"
+
+            return utilities.close(session_attributes, "Fulfilled", 'One moment while we connect you.')
+
+        else:
+
+            return utilities.delegate(session_attributes, slots)
 
     elif invocation_source == 'FulfillmentCodeHook':
 
-        pass
+        if 'BotOrigin' in session_attributes and 'JimCoConnect' == session_attributes['BotOrigin']:
 
-        # if account is not None and 'IdentityConfirmed' in session_attributes:
-        #
-        #     messages = jimcodb.get_account_messages(account['AccountNumber'])
-        #
-        #     if messages and len(messages) > 0:
-        #
-        #         response = utilities.confirm_intent(
-        #             session_attributes,
-        #             "AgentAssistance",
-        #             {"PhoneNumber": None},
-        #             messages[0]['AccountMessage'] + " May I transfer you to an associate?"
-        #         )
-        #
-        #     else:
-        #
-        #         session_attributes.pop('Account')
-        #
-        #         response = utilities.close(
-        #             session_attributes,
-        #             'Fulfilled',
-        #             'The account value for account {} is ${}'.format(account['AccountNumber'], account['AccountValue'])
-        #         )
-        #
-        #     return response
+            logger.info('Routing to an agent.')
 
-        client = boto3.client("lambda")
+            return utilities.close(session_attributes, "Fulfilled", 'One moment while we connect you.')
 
-        payload = json.dumps({
-            "DestinationPhoneNumber": slots['PhoneNumber'],
-            "Attributes": {
-                'Name': account["FirstName"] + " " + account["LastName"],
-                'AccountNumber': str(account['AccountNumber'])
-            }
-        })
+        else:
 
-        logger.info('payload: {}'.format(payload))
+            client = boto3.client("lambda")
 
-        response = client.invoke(
-            FunctionName='OutboundCall',
-            InvocationType='RequestResponse',
-            LogType='Tail',
-            Payload=payload
-        )
+            payload = json.dumps({
+                "DestinationPhoneNumber": slots['PhoneNumber'],
+                "Attributes": {
+                    'Name': account["FirstName"] + " " + account["LastName"],
+                    'AccountNumber': str(account['AccountNumber'])
+                }
+            })
 
-        logger.info('log: {}'.format(base64.b64decode(response['LogResult'])))
+            logger.info('payload: {}'.format(payload))
 
-        logger.info('OutboundCall response: {}'.format(response))
+            response = client.invoke(
+                FunctionName='OutboundCall',
+                InvocationType='RequestResponse',
+                LogType='Tail',
+                Payload=payload
+            )
 
-        return utilities.close(session_attributes, "Fulfilled", 'We will be calling you shortly')
+            logger.info('log: {}'.format(base64.b64decode(response['LogResult'])))
+
+            logger.info('OutboundCall response: {}'.format(response))
+
+            return utilities.close(session_attributes, "Fulfilled", 'We will be calling you shortly')
 
     return utilities.delegate(session_attributes, slots)
 

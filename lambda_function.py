@@ -4,11 +4,11 @@ import purchase
 import agent_assistance
 import utilities
 
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-
 
 # -----------------------------------------------------------------------------
+
 
 def dispatch(intent_request):
     logger.info('intent request: {}'.format(intent_request))
@@ -30,4 +30,8 @@ def dispatch(intent_request):
 
 
 def lambda_handler(event, context):
+
+    logger.info("event: {}".format(event))
+    logger.info("context: {}".format(context))
+
     return dispatch(event)

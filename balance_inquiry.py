@@ -72,7 +72,7 @@ def handle_balance_inquiry(intent_request):
 
             messages = jimcodb.get_account_messages(account['AccountNumber'])
 
-            balance_message = 'The account value for account {} is ${}.'.format(account['AccountNumber'], account['AccountValue'])
+            balance_message = 'The account value for account {} is ${} .'.format(account['AccountNumber'], account['AccountValue'])
 
             if messages and len(messages) > 0:
 
@@ -80,7 +80,7 @@ def handle_balance_inquiry(intent_request):
                     session_attributes,
                     "AgentAssistance",
                     {"PhoneNumber": None},
-                    balance_message + messages[0]['AccountMessage'] + " May I transfer you to an associate?"
+                    balance_message + " " + messages[0]['AccountMessage'] + " . May I transfer you to an associate?"
                 )
 
             else:
