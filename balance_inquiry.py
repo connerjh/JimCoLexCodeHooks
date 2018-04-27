@@ -44,7 +44,7 @@ def handle_balance_inquiry(intent_request):
             else:
 
                 slots['AccountNumber'] = None
-                if not use_SSML:
+                if use_SSML:
                     message_type = "SSML"
                     message = '<speak>The account number <say-as interpret-as="digits">{}</say-as> cannot be found. Can you provide another number?</speak>'.format(account_number)
                 else:
@@ -100,17 +100,17 @@ def handle_balance_inquiry(intent_request):
 
                 if not use_SSML:
                     message_type = "SSML"
-                    balance_message = '<speak>The account value for account <say-as interpret-as="digits">{}</say-as> is ${} <s> {} <s> {}</speak>'.format(
+                    message = '<speak>The account value for account <say-as interpret-as="digits">{}</say-as> is ${} <s> {} <s> {}</speak>'.format(
                         account['AccountNumber'], account['AccountValue'], messages[0]['AccountMessage'], " May I transfer you to an associate?"),
                 else:
                     message_type = "PlainText"
-                    balance_message = 'The account value for account {} is ${}. {} {}'.format(account['AccountNumber'], account['AccountValue'])
+                    message = 'The account value for account {} is ${}. {} {}'.format(account['AccountNumber'], account['AccountValue'], messages[0]['AccountMessage'], " May I transfer you to an associate?")
 
                 response = utilities.confirm_intent(
                     session_attributes,
                     "AgentAssistance",
                     {"PhoneNumber": None},
-                    balance_message,
+                    message,
                     message_type
                 )
 
