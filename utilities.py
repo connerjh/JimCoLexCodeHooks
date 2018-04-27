@@ -1,4 +1,4 @@
-def confirm_intent(session_attributes, intent_name, slots, message, message_type):
+def confirm_intent(session_attributes, intent_name, slots, message, message_type="PlainText"):
     return {
         'sessionAttributes': session_attributes,
         "dialogAction": {
@@ -13,7 +13,7 @@ def confirm_intent(session_attributes, intent_name, slots, message, message_type
     }
 
 
-def elicit_slot(session_attributes, intent_name, slots, slot_to_elicit, message, message_type):
+def elicit_slot(session_attributes, intent_name, slots, slot_to_elicit, message, message_type="PlainText"):
     return {
         'sessionAttributes': session_attributes,
         'dialogAction': {
@@ -26,7 +26,7 @@ def elicit_slot(session_attributes, intent_name, slots, slot_to_elicit, message,
     }
 
 
-def close(session_attributes, fulfillment_state, message, message_type):
+def close(session_attributes, fulfillment_state, message, message_type="PlainText"):
     response = {
         'sessionAttributes': session_attributes,
         'dialogAction': {
