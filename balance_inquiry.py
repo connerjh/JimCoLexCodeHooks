@@ -44,7 +44,7 @@ def handle_balance_inquiry(intent_request):
             else:
 
                 slots['AccountNumber'] = None
-                if use_SSML:
+                if not use_SSML:
                     message_type = "SSML"
                     message = '<speak>The account number <say-as interpret-as="digits">{}</say-as> cannot be found. Can you provide another number?</speak>'.format(account_number)
                 else:
