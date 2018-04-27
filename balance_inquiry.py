@@ -91,7 +91,7 @@ def handle_balance_inquiry(intent_request):
             messages = jimcodb.get_account_messages(account['AccountNumber'])
 
             if use_SSML:
-                balance_message = 'The account value for account {} is ${} .'.format(account['AccountNumber'], account['AccountValue'])
+                balance_message = 'The account value for account <say-as interpret-as="digits">{}</say-as> is ${} .'.format(account['AccountNumber'], account['AccountValue'])
             else:
                 balance_message = 'The account value for account {} is ${} .'.format(account['AccountNumber'], account['AccountValue'])
 
@@ -112,7 +112,7 @@ def handle_balance_inquiry(intent_request):
                     balance_message = 'The account value for account <say-as interpret-as="digits">{}</say-as> is ${} .'.format(account['AccountNumber'],
                                                                                                                                 account['AccountValue'])
                 else:
-                    balance_message = 'The account value for account <say-as interpret-as="digits">{}</say-as> is ${} .'.format(account['AccountNumber'],
+                    balance_message = 'The account value for account {} is ${} .'.format(account['AccountNumber'],
                                                                                                                                 account['AccountValue'])
                 response = utilities.close(
                     session_attributes,
