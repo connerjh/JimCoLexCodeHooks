@@ -23,6 +23,11 @@ def handle_balance_inquiry(intent_request):
     else:
         account = None
 
+    if 'BotOrigin' in session_attributes and 'JimCoConnect' == session_attributes['BotOrigin']:
+        use_SSML = True
+    else:
+        use_SSML = False
+
     if invocation_source == 'DialogCodeHook':
 
         if 'AccountNumber' in slots and slots['AccountNumber'] is not None and 'Account' not in session_attributes:
@@ -37,13 +42,20 @@ def handle_balance_inquiry(intent_request):
                 session_attributes['Account'] = json.dumps(account)
 
             else:
+
                 slots['AccountNumber'] = None
+                if use_SSML:
+                    message = 'The account number <say-as interpret-as="digits">{}</say-as> cannot be found. Can you provide another number?'.format(account_number)
+                else:
+                    message = 'The account number {} cannot be found. Can you provide another number?'.format(account_number)
+
+
                 return utilities.elicit_slot(
                     session_attributes,
                     intent_request['currentIntent']['name'],
                     slots,
                     'AccountNumber',
-                    'The account number <say-as interpret-as="digits">{}</say-as> cannot be found. Can you provide another number?'.format(account_number)
+                    message
                 )
 
         elif 'LastFourSSN' in slots and slots['LastFourSSN'] is not None and account is not None:
@@ -56,23 +68,32 @@ def handle_balance_inquiry(intent_request):
             else:
                 last_4_ssn = int(slots['LastFourSSN'])
                 slots['LastFourSSN'] = None
+
+                if use_SSML:
+                    message = 'The last four digits, <say-as interpret-as="digits">{}</say-as>, you have provided do not match the account <say-as interpret-as="digits">{}</say-as>. Can provide another four digits?'.format(last_4_ssn,
+                                                                                                                                       account['AccountNumber'])
+                else:
+                    message = 'The last four digits, {}, you have provided do not match the account {}. Can provide another four digits?'.format(last_4_ssn,
+                                                                                                                                       account['AccountNumber'])
+
                 return utilities.elicit_slot(
                     session_attributes,
                     intent_request['currentIntent']['name'],
                     slots,
                     'LastFourSSN',
-                    'The last four digits, <say-as interpret-as="digits">{}</say-as>, you have provided do not match the account <say-as interpret-as="digits">{}</say-as>. Can provide another four digits?'.format(last_4_ssn,
-                                                                                                                                       account['AccountNumber'])
+                    message
                 )
 
     elif invocation_source == 'FulfillmentCodeHook':
 
         if account is not None and 'IdentityConfirmed' in session_attributes:
-            # def close(session_attributes, fulfillment_state, message):
 
             messages = jimcodb.get_account_messages(account['AccountNumber'])
 
-            balance_message = 'The account value for account <say-as interpret-as="digits">{}</say-as> is ${} .'.format(account['AccountNumber'], account['AccountValue'])
+            if use_SSML:
+                balance_message = 'The account value for account {} is ${} .'.format(account['AccountNumber'], account['AccountValue'])
+            else:
+                balance_message = 'The account value for account {} is ${} .'.format(account['AccountNumber'], account['AccountValue'])
 
             if messages and len(messages) > 0:
 
@@ -87,10 +108,16 @@ def handle_balance_inquiry(intent_request):
 
                 session_attributes.pop('Account')
 
+                if use_SSML:
+                    balance_message = 'The account value for account <say-as interpret-as="digits">{}</say-as> is ${} .'.format(account['AccountNumber'],
+                                                                                                                                account['AccountValue'])
+                else:
+                    balance_message = 'The account value for account <say-as interpret-as="digits">{}</say-as> is ${} .'.format(account['AccountNumber'],
+                                                                                                                                account['AccountValue'])
                 response = utilities.close(
                     session_attributes,
                     'Fulfilled',
-                    'The account value for account <say-as interpret-as="digits">{}</say-as> is ${} .'.format(account['AccountNumber'], account['AccountValue'])
+                    balance_message
                 )
 
             return response
