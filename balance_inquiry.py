@@ -45,7 +45,7 @@ def handle_balance_inquiry(intent_request):
 
                 slots['AccountNumber'] = None
                 if use_SSML:
-                    message = 'The account number <say-as interpret-as="digits">{}</say-as> cannot be found. Can you provide another number?'.format(account_number)
+                    message = '<speak>The account number <say-as interpret-as="digits">{}</say-as> cannot be found. Can you provide another number?</speak>'.format(account_number)
                 else:
                     message = 'The account number {} cannot be found. Can you provide another number?'.format(account_number)
 
@@ -70,7 +70,7 @@ def handle_balance_inquiry(intent_request):
                 slots['LastFourSSN'] = None
 
                 if use_SSML:
-                    message = 'The last four digits, <say-as interpret-as="digits">{}</say-as>, you have provided do not match the account <say-as interpret-as="digits">{}</say-as>. Can provide another four digits?'.format(last_4_ssn,
+                    message = '<speak>The last four digits, <say-as interpret-as="digits">{}</say-as>, you have provided do not match the account <say-as interpret-as="digits">{}</say-as>. Can provide another four digits?</speak>'.format(last_4_ssn,
                                                                                                                                        account['AccountNumber'])
                 else:
                     message = 'The last four digits, {}, you have provided do not match the account {}. Can provide another four digits?'.format(last_4_ssn,
@@ -90,18 +90,19 @@ def handle_balance_inquiry(intent_request):
 
             messages = jimcodb.get_account_messages(account['AccountNumber'])
 
-            if use_SSML:
-                balance_message = 'The account value for account <say-as interpret-as="digits">{}</say-as> is ${} .'.format(account['AccountNumber'], account['AccountValue'])
-            else:
-                balance_message = 'The account value for account {} is ${} .'.format(account['AccountNumber'], account['AccountValue'])
-
             if messages and len(messages) > 0:
+
+                if use_SSML:
+                    balance_message = '<speak>The account value for account <say-as interpret-as="digits">{}</say-as> is ${} <s> {} <s> {}</speak>'.format(
+                        account['AccountNumber'], account['AccountValue'], messages[0]['AccountMessage'], " May I transfer you to an associate?"),
+                else:
+                    balance_message = 'The account value for account {} is ${}. {} {}'.format(account['AccountNumber'], account['AccountValue'])
 
                 response = utilities.confirm_intent(
                     session_attributes,
                     "AgentAssistance",
                     {"PhoneNumber": None},
-                    balance_message + " " + messages[0]['AccountMessage'] + " May I transfer you to an associate?"
+                    balance_message
                 )
 
             else:
@@ -109,7 +110,7 @@ def handle_balance_inquiry(intent_request):
                 session_attributes.pop('Account')
 
                 if use_SSML:
-                    balance_message = 'The account value for account <say-as interpret-as="digits">{}</say-as> is ${} .'.format(account['AccountNumber'],
+                    balance_message = '<speak>The account value for account <say-as interpret-as="digits">{}</say-as> is ${} .</speak>'.format(account['AccountNumber'],
                                                                                                                                 account['AccountValue'])
                 else:
                     balance_message = 'The account value for account {} is ${} .'.format(account['AccountNumber'],
