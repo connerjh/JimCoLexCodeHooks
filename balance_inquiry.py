@@ -101,7 +101,7 @@ def handle_balance_inquiry(intent_request):
                     session_attributes,
                     "AgentAssistance",
                     {"PhoneNumber": None},
-                    balance_message + " " + messages[0]['AccountMessage'] + ", May I transfer you to an associate?"
+                    balance_message + " " + messages[0]['AccountMessage'] + " May I transfer you to an associate?"
                 )
 
             else:
