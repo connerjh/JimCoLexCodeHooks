@@ -43,7 +43,7 @@ def handle_balance_inquiry(intent_request):
                     intent_request['currentIntent']['name'],
                     slots,
                     'AccountNumber',
-                    'The account number {} cannot be found. Can you provide another number?'.format(account_number)
+                    'The account number <say-as interpret-as="digits">{}</say-as> cannot be found. Can you provide another number?'.format(account_number)
                 )
 
         elif 'LastFourSSN' in slots and slots['LastFourSSN'] is not None and account is not None:
@@ -61,7 +61,7 @@ def handle_balance_inquiry(intent_request):
                     intent_request['currentIntent']['name'],
                     slots,
                     'LastFourSSN',
-                    'The last four digits, {}, you have provided do not match the account {}. Can provide another four digits?'.format(last_4_ssn,
+                    'The last four digits, <say-as interpret-as="digits">{}</say-as>, you have provided do not match the account <say-as interpret-as="digits">{}</say-as>. Can provide another four digits?'.format(last_4_ssn,
                                                                                                                                        account['AccountNumber'])
                 )
 
@@ -72,7 +72,7 @@ def handle_balance_inquiry(intent_request):
 
             messages = jimcodb.get_account_messages(account['AccountNumber'])
 
-            balance_message = 'The account value for account {} is ${} .'.format(account['AccountNumber'], account['AccountValue'])
+            balance_message = 'The account value for account <say-as interpret-as="digits">{}</say-as> is ${} .'.format(account['AccountNumber'], account['AccountValue'])
 
             if messages and len(messages) > 0:
 
@@ -90,7 +90,7 @@ def handle_balance_inquiry(intent_request):
                 response = utilities.close(
                     session_attributes,
                     'Fulfilled',
-                    'The account value for account {} is ${}'.format(account['AccountNumber'], account['AccountValue'])
+                    'The account value for account <say-as interpret-as="digits">{}</say-as> is ${} .'.format(account['AccountNumber'], account['AccountValue'])
                 )
 
             return response
