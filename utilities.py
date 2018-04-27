@@ -1,11 +1,11 @@
-def confirm_intent(session_attributes, intent_name, slots, message):
+def confirm_intent(session_attributes, intent_name, slots, message, message_type):
     return {
         'sessionAttributes': session_attributes,
         "dialogAction": {
             "type": "ConfirmIntent",
             "slots": slots,
             "message": {
-                "contentType": "SSML",
+                "contentType": message_type,
                 "content": message
             },
             "intentName": intent_name,
@@ -13,7 +13,7 @@ def confirm_intent(session_attributes, intent_name, slots, message):
     }
 
 
-def elicit_slot(session_attributes, intent_name, slots, slot_to_elicit, message):
+def elicit_slot(session_attributes, intent_name, slots, slot_to_elicit, message, message_type):
     return {
         'sessionAttributes': session_attributes,
         'dialogAction': {
@@ -21,18 +21,18 @@ def elicit_slot(session_attributes, intent_name, slots, slot_to_elicit, message)
             'intentName': intent_name,
             'slots': slots,
             'slotToElicit': slot_to_elicit,
-            'message': {'contentType': 'SSML', 'content': message}
+            'message': {'contentType': message_type, 'content': message}
         }
     }
 
 
-def close(session_attributes, fulfillment_state, message):
+def close(session_attributes, fulfillment_state, message, message_type):
     response = {
         'sessionAttributes': session_attributes,
         'dialogAction': {
             'type': 'Close',
             'fulfillmentState': fulfillment_state,
-            'message': {'contentType': 'SSML', 'content': message}
+            'message': {'contentType': message_type, 'content': message}
         }
     }
 
