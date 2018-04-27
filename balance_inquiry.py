@@ -98,10 +98,10 @@ def handle_balance_inquiry(intent_request):
 
             if messages and len(messages) > 0:
 
-                if not use_SSML:
+                if use_SSML:
                     message_type = "SSML"
                     message = '<speak>The account value for account <say-as interpret-as="digits">{}</say-as> is ${} <s> {} <s> {}</speak>'.format(
-                        account['AccountNumber'], account['AccountValue'], messages[0]['AccountMessage'], " May I transfer you to an associate?"),
+                        account['AccountNumber'], account['AccountValue'], messages[0]['AccountMessage'], " May I transfer you to an associate?")
                 else:
                     message_type = "PlainText"
                     message = 'The account value for account {} is ${}. {} {}'.format(account['AccountNumber'], account['AccountValue'], messages[0]['AccountMessage'], " May I transfer you to an associate?")

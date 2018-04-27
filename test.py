@@ -20,8 +20,10 @@ event1 = {
   "outputDialogMode": "Text",
   "messageVersion": "1.0",
   "sessionAttributes": {
-    "BotOrigin": "JimCoConnect"
-  }
+    "BotOrigin": "JimCoConnect",
+    "Account": '{"AccountValue": 54321.99, "AccountNumber": 12345, "LastFourSSN": 2345, "Name": "Bob Smith"}',
+    "IdentityConfirmed": True
+}
 }
 
 event2 = {
