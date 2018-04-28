@@ -40,6 +40,20 @@ def elicit_slot(session_attributes, intent_name, slots, slot_to_elicit, message,
     return response
 
 
+def elicit_intent(session_attributes, message, message_type="PlainText"):
+    response = {
+        'sessionAttributes': session_attributes,
+        'dialogAction': {
+            'type': 'ElicitIntent',
+            'message': {'contentType': message_type, 'content': message}
+        }
+    }
+
+    logger.info("Elicit response: {}".format(response))
+
+    return response
+
+
 def close(session_attributes, fulfillment_state, message, message_type="PlainText"):
     response = {
         'sessionAttributes': session_attributes,

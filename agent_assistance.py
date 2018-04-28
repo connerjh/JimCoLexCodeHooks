@@ -31,7 +31,7 @@ def handle_agent_assistance(intent_request):
 
         if "Denied" == intent_request['currentIntent']['confirmationStatus']:
 
-            return utilities.close(session_attributes, "Failed", 'Ok.')
+            return utilities.elicit_intent(session_attributes, "Ok, what else can I help you with today?")
 
         elif 'BotOrigin' in session_attributes and 'JimCoConnect' == session_attributes['BotOrigin']:
 
