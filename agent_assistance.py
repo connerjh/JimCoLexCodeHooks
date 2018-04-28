@@ -29,7 +29,11 @@ def handle_agent_assistance(intent_request):
 
     if invocation_source == 'DialogCodeHook':
 
-        if 'BotOrigin' in session_attributes and 'JimCoConnect' == session_attributes['BotOrigin']:
+        if "Denied" == intent_request['confirmationStatus']:
+
+            return utilities.close(session_attributes, "Failed", 'Ok.')
+
+        elif 'BotOrigin' in session_attributes and 'JimCoConnect' == session_attributes['BotOrigin']:
 
             logger.info('setting phone number to blank.')
             slots['PhoneNumber'] = "+10000000000"
