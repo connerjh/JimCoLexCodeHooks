@@ -21,6 +21,11 @@ def handle_purchase(intent_request):
     else:
         account = None
 
+    if 'BotOrigin' in session_attributes and 'JimCoConnect' == session_attributes['BotOrigin']:
+        use_SSML = True
+    else:
+        use_SSML = False
+
     if invocation_source == 'DialogCodeHook':
 
         if 'AccountNumber' in slots and slots['AccountNumber'] is not None and 'Account' not in session_attributes:
@@ -36,13 +41,24 @@ def handle_purchase(intent_request):
                 return utilities.delegate(session_attributes, slots)
 
             else:
+
+                if use_SSML:
+                    message_type = "SSML"
+                    message = '<speak>The account number  <say-as interpret-as="digits">{}</say-as> cannot be found. Can you provide another number?</speak>'.\
+                        format(account_number)
+                else:
+                    message_type = "PlainText"
+                    message = 'The account number {} cannot be found. Can you provide another number?'.\
+                        format(account_number)
+
                 slots['AccountNumber'] = None
                 return utilities.elicit_slot(
                     session_attributes,
                     intent_request['currentIntent']['name'],
                     slots,
                     'AccountNumber',
-                    'The account number {} cannot be found. Can you provide another number?'.format(account_number)
+                    message,
+                    message_type
                 )
 
         elif 'LastFourSSN' in slots and slots['LastFourSSN'] is not None and account is not None and 'IdentityConfirmed' not in session_attributes:
@@ -56,13 +72,22 @@ def handle_purchase(intent_request):
             else:
                 last_4_ssn = int(slots['LastFourSSN'])
                 slots['LastFourSSN'] = None
+                if use_SSML:
+                    message_type = "SSML"
+                    message = '<speak>The last four digits, <say-as interpret-as="digits">{}</say-as>, you have provided do not match the account <say-as interpret-as="digits">{}</say-as>. Can provide another four digits?</speak>'.\
+                        format(last_4_ssn, account['AccountNumber'])
+                else:
+                    message_type = "PlainText"
+                    message = 'The last four digits, {}, you have provided do not match the account {}. Can provide another four digits?'.\
+                        format(last_4_ssn, account['AccountNumber'])
+
                 return utilities.elicit_slot(
                     session_attributes,
                     intent_request['currentIntent']['name'],
                     slots,
                     'LastFourSSN',
-                    'The last four digits, {}, you have provided do not match the account {}. Can provide another four digits?'.format(last_4_ssn,
-                                                                                                                                       account['AccountNumber'])
+                    message,
+                    message_type
                 )
 
         elif 'Amount' in slots and slots['Amount'] is not None and account is not None:
@@ -76,6 +101,7 @@ def handle_purchase(intent_request):
             else:
                 amount = slots['Amount']
                 slots['Amount'] = None
+
                 return utilities.elicit_slot(
                     session_attributes,
                     intent_request['currentIntent']['name'],
@@ -100,14 +126,26 @@ def handle_purchase(intent_request):
 
             logger.info('updated account: {}'.format(account))
 
-            return utilities.close(
-                session_attributes,
-                'Fulfilled',
-                'We have successfully invested ${} into the account {}. Your new balance is ${}'.format(
+            if use_SSML:
+                message_type = "SSML"
+                message = '<speak>We have successfully invested ${} into the account <say-as interpret-as="digits">{}</say-as>. Your new balance is ${}</speak>'.format(
                     amount,
                     account['AccountNumber'],
                     account['AccountValue']
                 )
+            else:
+                message_type = "PlainText"
+                message = 'We have successfully invested ${} into the account {}. Your new balance is ${}'.format(
+                    amount,
+                    account['AccountNumber'],
+                    account['AccountValue']
+                )
+
+            return utilities.close(
+                session_attributes,
+                'Fulfilled',
+                message,
+                message_type
             )
 
         else:
@@ -115,11 +153,7 @@ def handle_purchase(intent_request):
             return utilities.close(
                 session_attributes,
                 'Failed',
-                'We have failed to invest ${} into the account {}. Your new balance is ${}'.format(
-                    amount,
-                    account['AccountNumber'],
-                    account['AccountValue']
-                )
+                'We have failed to process your request'
             )
 
     return utilities.delegate(session_attributes, slots)
