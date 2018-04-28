@@ -46,10 +46,12 @@ def handle_balance_inquiry(intent_request):
                 slots['AccountNumber'] = None
                 if use_SSML:
                     message_type = "SSML"
-                    message = '<speak>The account number <say-as interpret-as="digits">{}</say-as> cannot be found. Can you provide another number?</speak>'.format(account_number)
+                    message = '<speak>The account number <say-as interpret-as="digits">{}</say-as> cannot be found. Can you provide another number?</speak>'.\
+                        format(account_number)
                 else:
                     message_type = "PlainText"
-                    message = 'The account number {} cannot be found. Can you provide another number?'.format(account_number)
+                    message = 'The account number {} cannot be found. Can you provide another number?'.\
+                        format(account_number)
 
 
                 return utilities.elicit_slot(
@@ -74,12 +76,12 @@ def handle_balance_inquiry(intent_request):
 
                 if use_SSML:
                     message_type = "SSML"
-                    message = '<speak>The last four digits, <say-as interpret-as="digits">{}</say-as>, you have provided do not match the account <say-as interpret-as="digits">{}</say-as>. Can provide another four digits?</speak>'.format(last_4_ssn,
-                                                                                                                                       account['AccountNumber'])
+                    message = '<speak>The last four digits, <say-as interpret-as="digits">{}</say-as>, you have provided do not match the account <say-as interpret-as="digits">{}</say-as>. Can provide another four digits?</speak>'.\
+                        format(last_4_ssn, account['AccountNumber'])
                 else:
                     message_type = "PlainText"
-                    message = 'The last four digits, {}, you have provided do not match the account {}. Can provide another four digits?'.format(last_4_ssn,
-                                                                                                                                       account['AccountNumber'])
+                    message = 'The last four digits, {}, you have provided do not match the account {}. Can provide another four digits?'.\
+                        format(last_4_ssn, account['AccountNumber'])
 
                 return utilities.elicit_slot(
                     session_attributes,
@@ -104,7 +106,8 @@ def handle_balance_inquiry(intent_request):
                         account['AccountNumber'], account['AccountValue'], messages[0]['AccountMessage'], " May I transfer you to an associate?")
                 else:
                     message_type = "PlainText"
-                    message = 'The account value for account {} is ${}. {} {}'.format(account['AccountNumber'], account['AccountValue'], messages[0]['AccountMessage'], " May I transfer you to an associate?")
+                    message = 'The account value for account {} is ${}. {} {}'.\
+                        format(account['AccountNumber'], account['AccountValue'], messages[0]['AccountMessage'], " May I transfer you to an associate?")
 
                 response = utilities.confirm_intent(
                     session_attributes,
@@ -120,12 +123,12 @@ def handle_balance_inquiry(intent_request):
 
                 if use_SSML:
                     message_type = "SSML"
-                    balance_message = '<speak>The account value for account <say-as interpret-as="digits">{}</say-as> is ${} .</speak>'.format(account['AccountNumber'],
-                                                                                                                                account['AccountValue'])
+                    balance_message = '<speak>The account value for account <say-as interpret-as="digits">{}</say-as> is ${} .</speak>'.\
+                        format(account['AccountNumber'], account['AccountValue'])
                 else:
                     message_type = "PlainText"
-                    balance_message = 'The account value for account {} is ${} .'.format(account['AccountNumber'],
-                                                                                                                                account['AccountValue'])
+                    balance_message = 'The account value for account {} is ${} .'.\
+                        format(account['AccountNumber'], account['AccountValue'])
                 response = utilities.close(
                     session_attributes,
                     'Fulfilled',
