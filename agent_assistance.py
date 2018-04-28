@@ -29,7 +29,7 @@ def handle_agent_assistance(intent_request):
 
     if invocation_source == 'DialogCodeHook':
 
-        if "Denied" == intent_request['confirmationStatus']:
+        if "Denied" == intent_request['currentIntent']['confirmationStatus']:
 
             return utilities.close(session_attributes, "Failed", 'Ok.')
 
