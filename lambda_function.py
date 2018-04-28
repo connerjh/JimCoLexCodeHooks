@@ -11,6 +11,7 @@ logger = logging.getLogger()
 
 
 def dispatch(intent_request):
+
     logger.info('intent request: {}'.format(intent_request))
 
     intent_name = intent_request['currentIntent']['name']

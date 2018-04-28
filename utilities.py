@@ -1,5 +1,11 @@
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger()
+
+
 def confirm_intent(session_attributes, intent_name, slots, message, message_type="PlainText"):
-    return {
+    response = {
         'sessionAttributes': session_attributes,
         "dialogAction": {
             "type": "ConfirmIntent",
@@ -12,9 +18,13 @@ def confirm_intent(session_attributes, intent_name, slots, message, message_type
         }
     }
 
+    logger.info("Confirm intent response: {}".format(response))
+
+    return response
+
 
 def elicit_slot(session_attributes, intent_name, slots, slot_to_elicit, message, message_type="PlainText"):
-    return {
+    response = {
         'sessionAttributes': session_attributes,
         'dialogAction': {
             'type': 'ElicitSlot',
@@ -24,6 +34,10 @@ def elicit_slot(session_attributes, intent_name, slots, slot_to_elicit, message,
             'message': {'contentType': message_type, 'content': message}
         }
     }
+
+    logger.info("Elicit response: {}".format(response))
+
+    return response
 
 
 def close(session_attributes, fulfillment_state, message, message_type="PlainText"):
@@ -36,14 +50,20 @@ def close(session_attributes, fulfillment_state, message, message_type="PlainTex
         }
     }
 
+    logger.info("Close response: {}".format(response))
+
     return response
 
 
 def delegate(session_attributes, slots):
-    return {
+    response = {
         'sessionAttributes': session_attributes,
         'dialogAction': {
             'type': 'Delegate',
             'slots': slots
         }
     }
+
+    logger.info("Delegate response: {}".format(response))
+
+    return response

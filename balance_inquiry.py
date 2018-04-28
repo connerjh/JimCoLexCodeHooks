@@ -12,6 +12,7 @@ logger.setLevel(logging.INFO)
 # -----------------------------------------------------------------------------
 
 def handle_balance_inquiry(intent_request):
+
     logger.info('Handling balance inquiry')
 
     invocation_source = intent_request['invocationSource']
@@ -97,6 +98,8 @@ def handle_balance_inquiry(intent_request):
         if account is not None and 'IdentityConfirmed' in session_attributes:
 
             messages = jimcodb.get_account_messages(account['AccountNumber'])
+
+            logger.info('Messages: {}'.format(messages))
 
             if messages and len(messages) > 0:
 

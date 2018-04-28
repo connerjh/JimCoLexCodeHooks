@@ -13,6 +13,7 @@ logger = logging.getLogger()
 
 
 def handle_agent_assistance(intent_request):
+
     logger.info('Handling agent assistance')
 
     invocation_source = intent_request['invocationSource']
@@ -23,6 +24,8 @@ def handle_agent_assistance(intent_request):
         account = json.loads(session_attributes['Account'])
     else:
         account = None
+
+    logger.info('Account {}:'.format(account))
 
     if invocation_source == 'DialogCodeHook':
 
