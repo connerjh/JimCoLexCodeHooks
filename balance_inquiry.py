@@ -105,7 +105,7 @@ def handle_balance_inquiry(intent_request):
 
                 if use_SSML:
                     message_type = "SSML"
-                    message = '<speak>The account value for account <say-as interpret-as="digits">{}</say-as> is ${} <s> {} <s> {}</speak>'.format(
+                    message = '<speak><s>The account value for account <say-as interpret-as="digits">{}</say-as> is ${}</s><s>{}</s><s>{}</s></speak>'.format(
                         account['AccountNumber'], account['AccountValue'], messages[0]['AccountMessage'], " May I transfer you to an associate?")
 
                     logger.info("Response message: {}".format(message))
