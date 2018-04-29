@@ -12,4 +12,4 @@ aws lambda update-function-code \
 --function-name   JimCoLexCodeHooks  \
 --zip-file fileb://JimCoLexCodeHooks.zip
 
-aws ses create-template --cli-input-json fileb://purchase.email.json
+aws ses create-template --cli-input-json file://purchase.email.json
