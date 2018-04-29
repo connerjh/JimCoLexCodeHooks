@@ -2,6 +2,7 @@ import jimcodb
 import utilities
 import logging
 import json
+import email_utility
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -140,6 +141,20 @@ def handle_purchase(intent_request):
                     account['AccountNumber'],
                     account['AccountValue']
                 )
+
+            # def send_confirmation(name, recipient, subject, body):
+
+            email_utility.send_confirmation(
+                account['FirstName'] + ' ' + account['LastName'],
+                "b_rennochj@outlook.com",
+                "Confirmation of Purchase",
+                'We have successfully invested ${} into the account {}. Your new balance is ${}'.format(
+                    amount,
+                    account['AccountNumber'],
+                    account['AccountValue']
+                ),
+                '{"Type": "Purchase", "Id": "12345"}'
+            )
 
             return utilities.close(
                 session_attributes,

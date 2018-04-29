@@ -127,5 +127,5 @@ context = None
 
 # print(jimcodb.get_account_messages(12345))
 
-print(lambda_function.lambda_handler(event1, context))
+print(lambda_function.lambda_handler(event2, context))
 
