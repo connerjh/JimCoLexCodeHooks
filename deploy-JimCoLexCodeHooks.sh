@@ -5,7 +5,7 @@ git commit -a -m 'commiting'
 rm JimCoLexCodeHooks.zip
 
 zip -r JimCoLexCodeHooks.zip pymysql agent_assistance.py balance_inquiry.py jimcodb.py lambda_function.py \
-    purchase.py utilities.py rds_config.py
+    purchase.py utilities.py rds_config.py email_utility.py
 
 aws lambda update-function-code \
 --region us-east-1 \
