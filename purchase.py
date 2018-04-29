@@ -144,6 +144,11 @@ def handle_purchase(intent_request):
 
             # def send_confirmation(name, recipient, subject, body):
 
+            context = json.dumps({
+                "Type": "Purchase",
+                "Id": "123456"
+            })
+
             email_utility.send_confirmation(
                 account['FirstName'] + ' ' + account['LastName'],
                 "b_rennochj@outlook.com",
@@ -153,7 +158,7 @@ def handle_purchase(intent_request):
                     account['AccountNumber'],
                     account['AccountValue']
                 ),
-                '{"Type": "Purchase", "Id": "12345"}'
+                context
             )
 
             return utilities.close(

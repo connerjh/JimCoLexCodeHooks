@@ -51,7 +51,7 @@ def send_confirmation(name, recipient, subject, body, context):
         </p>
 
         <p>
-            <a href='http://jimcoweb-dev.us-east-1.elasticbeanstalk.com/portal/call?context={}'>Call</a> for additional assistance
+            <a href='http://jimcoweb-dev.us-east-1.elasticbeanstalk.com/login/?next=/portal?callContext={}'>Call</a> for additional assistance
         </p>
 
     </body>
