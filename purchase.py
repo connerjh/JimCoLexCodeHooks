@@ -157,4 +157,3 @@ def handle_purchase(intent_request):
             )
 
     return utilities.delegate(session_attributes, slots)
-

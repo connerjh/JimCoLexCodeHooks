@@ -11,3 +11,5 @@ aws lambda update-function-code \
 --region us-east-1 \
 --function-name   JimCoLexCodeHooks  \
 --zip-file fileb://JimCoLexCodeHooks.zip
+
+aws ses create-template --cli-input-json fileb://purchase.email.json
