@@ -8,7 +8,7 @@ def send_confirmation(name, recipient, subject, body, context):
 
     # Replace sender@example.com with your "From" address.
     # This address must be verified.
-    SENDER = 'jhhc@capgroup.com'
+    SENDER = 'b_rennochj@outlook.com'
     SENDERNAME = 'JimCo'
 
     # Replace recipient@example.com with a "To" address. If your account
